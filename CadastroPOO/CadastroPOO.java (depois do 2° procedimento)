@@ -1,0 +1,233 @@
+package cadastropoo;
+
+import java.util.Scanner;
+import model.PessoaFisica;
+import model.PessoaFisicaRepo;
+import model.PessoaJuridica;
+import model.PessoaJuridicaRepo;
+
+public class CadastroPOO {
+
+    public static void main(String[] args) {
+
+        try (Scanner sc = new Scanner(System.in)) {
+            PessoaFisicaRepo repoFisica = new PessoaFisicaRepo();
+            PessoaJuridicaRepo repoJuridica = new PessoaJuridicaRepo();
+            
+            int opcao;
+            
+            do {
+                System.out.println("\n===== CADASTRO POO =====");
+                System.out.println("1 - Incluir");
+                System.out.println("2 - Alterar");
+                System.out.println("3 - Excluir");
+                System.out.println("4 - Exibir pelo ID");
+                System.out.println("5 - Exibir Todos");
+                System.out.println("6 - Salvar Dados");
+                System.out.println("7 - Recuperar Dados");
+                System.out.println("0 - Finalizar");
+                System.out.print("Opção: ");
+                
+                opcao = sc.nextInt();
+                sc.nextLine();
+                
+                switch (opcao) {
+                    
+                    case 1: // Incluir
+                        System.out.print("F - Pessoa Física | J - Pessoa Jurídica: ");
+                        String tipo = sc.nextLine();
+                        
+                        if (tipo.equalsIgnoreCase("F")) {
+                            
+                            System.out.print("ID: ");
+                            int id = sc.nextInt();
+                            sc.nextLine();
+                            
+                            System.out.print("Nome: ");
+                            String nome = sc.nextLine();
+                            
+                            System.out.print("CPF: ");
+                            String cpf = sc.nextLine();
+                            
+                            System.out.print("Idade: ");
+                            int idade = sc.nextInt();
+                            sc.nextLine();
+                            
+                            repoFisica.inserir(
+                                    new PessoaFisica(id, nome, cpf, idade));
+                            
+                        } else {
+                            
+                            System.out.print("ID: ");
+                            int id = sc.nextInt();
+                            sc.nextLine();
+                            
+                            System.out.print("Nome: ");
+                            String nome = sc.nextLine();
+                            
+                            System.out.print("CNPJ: ");
+                            String cnpj = sc.nextLine();
+                            
+                            repoJuridica.inserir(
+                                    new PessoaJuridica(id, nome, cnpj));
+                        }
+                        
+                        break;
+                        
+                    case 2: // Alterar
+                        System.out.print("F - Pessoa Física | J - Pessoa Jurídica: ");
+                        tipo = sc.nextLine();
+                        
+                        System.out.print("ID: ");
+                        int idAlterar = sc.nextInt();
+                        sc.nextLine();
+                        
+                        if (tipo.equalsIgnoreCase("F")) {
+                            
+                            PessoaFisica pf = repoFisica.obter(idAlterar);
+                            
+                            if (pf != null) {
+                                
+                                pf.exibir();
+                                
+                                System.out.print("Novo Nome: ");
+                                String nome = sc.nextLine();
+                                
+                                System.out.print("Novo CPF: ");
+                                String cpf = sc.nextLine();
+                                
+                                System.out.print("Nova Idade: ");
+                                int idade = sc.nextInt();
+                                sc.nextLine();
+                                
+                                repoFisica.alterar(
+                                        new PessoaFisica(idAlterar, nome, cpf, idade));
+                            }
+                            
+                        } else {
+                            
+                            PessoaJuridica pj = repoJuridica.obter(idAlterar);
+                            
+                            if (pj != null) {
+                                
+                                pj.exibir();
+                                
+                                System.out.print("Novo Nome: ");
+                                String nome = sc.nextLine();
+                                
+                                System.out.print("Novo CNPJ: ");
+                                String cnpj = sc.nextLine();
+                                
+                                repoJuridica.alterar(
+                                        new PessoaJuridica(idAlterar, nome, cnpj));
+                            }
+                        }
+                        
+                        break;
+                        
+                    case 3: // Excluir
+                        System.out.print("F - Pessoa Física | J - Pessoa Jurídica: ");
+                        tipo = sc.nextLine();
+                        
+                        System.out.print("ID: ");
+                        int idExcluir = sc.nextInt();
+                        sc.nextLine();
+                        
+                        if (tipo.equalsIgnoreCase("F")) {
+                            repoFisica.excluir(idExcluir);
+                        } else {
+                            repoJuridica.excluir(idExcluir);
+                        }
+                        
+                        break;
+                        
+                    case 4: // Exibir pelo ID
+                        System.out.print("F - Pessoa Física | J - Pessoa Jurídica: ");
+                        tipo = sc.nextLine();
+                        
+                        System.out.print("ID: ");
+                        int idBuscar = sc.nextInt();
+                        sc.nextLine();
+                        
+                        if (tipo.equalsIgnoreCase("F")) {
+                            
+                            PessoaFisica pf = repoFisica.obter(idBuscar);
+                            
+                            if (pf != null) {
+                                pf.exibir();
+                            }
+                            
+                        } else {
+                            
+                            PessoaJuridica pj = repoJuridica.obter(idBuscar);
+                            
+                            if (pj != null) {
+                                pj.exibir();
+                            }
+                        }
+                        
+                        break;
+                        
+                    case 5: // Exibir todos
+                        System.out.print("F - Pessoa Física | J - Pessoa Jurídica: ");
+                        tipo = sc.nextLine();
+                        
+                        if (tipo.equalsIgnoreCase("F")) {
+                            
+                            for (PessoaFisica pf : repoFisica.obterTodos()) {
+                                pf.exibir();
+                                System.out.println("----------------");
+                            }
+                            
+                        } else {
+                            
+                            for (PessoaJuridica pj : repoJuridica.obterTodos()) {
+                                pj.exibir();
+                                System.out.println("----------------");
+                            }
+                        }
+                        
+                        break;
+                        
+                    case 6: // Salvar
+                        System.out.print("Prefixo dos arquivos: ");
+                        String prefixoSalvar = sc.nextLine();
+                        
+                        try {
+                            repoFisica.persistir(prefixoSalvar + ".fisica.bin");
+                            repoJuridica.persistir(prefixoSalvar + ".juridica.bin");
+                            
+                            System.out.println("Dados salvos com sucesso.");
+                        } catch (Exception e) {
+                            System.out.println("Erro ao salvar: " + e.getMessage());
+                        }
+                        
+                        break;
+                        
+                    case 7: // Recuperar
+                        System.out.print("Prefixo dos arquivos: ");
+                        String prefixoRecuperar = sc.nextLine();
+                        
+                        try {
+                            repoFisica.recuperar(prefixoRecuperar + ".fisica.bin");
+                            repoJuridica.recuperar(prefixoRecuperar + ".juridica.bin");
+                            
+                            System.out.println("Dados recuperados com sucesso.");
+                        } catch (Exception e) {
+                            System.out.println("Erro ao recuperar: " + e.getMessage());
+                        }
+                        
+                        break;
+                        
+                    case 0:
+                        System.out.println("Sistema finalizado.");
+                        break;
+                        
+                    default:
+                        System.out.println("Opção inválida.");
+                }
+                
+            } while (opcao != 0);
+        }
+    }
+}
